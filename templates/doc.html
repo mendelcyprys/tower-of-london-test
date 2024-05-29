@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Tower of London</title>
+    <style>
+      body {
+        text-align: center;
+        max-width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 50px;
+      }
+      table {
+        margin-left: auto;
+        margin-right: auto;
+        border-collapse: collapse;
+        border: 0px;
+        font-size: x-large;
+      }
+      svg {
+        margin-top: -25px;
+        width: 145px;
+        height: 145px;
+        user-select: none;
+      }
+      .flex-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>The Tower of London Test</h1>
+    <h2>The case of equal rods</h2>
+    <h3>How to use the results table</h3>
+    <h4>Converting to the starting configuration</h4>
+    <p>
+      Because there is no essential difference between the rods, there are
+      essentially three starting configurations:
+    </p>
+    {% for option in equal.options %} {{ option }} {% endfor %}
+    <p>For example, suppose the problem is to convert</p>
+    <div class="flex-row">
+      {{ equal.coloured_examples.0 }}
+      <p>into</p>
+      {{ equal.coloured_examples.1 }}
+    </div>
+    <p>
+      Swapping the first and third rod, for both the initial and final
+      configurations, the problem now has the appearance of converting
+    </p>
+    <div class="flex-row">
+      {{ equal.coloured_examples.2 }}
+      <p>into</p>
+      {{ equal.coloured_examples.3 }}
+    </div>
+    <p>
+      Now associating blue with 1, red with 2, and green with 3, the problem now
+      has the appearance of converting
+    </p>
+    <div class="flex-row">
+      {{ equal.numbered_examples.0 }}
+      <p>into</p>
+      {{ equal.numbered_examples.1 }}
+    </div>
+    <p>
+      Once we have the solution, we can swap the rods back to the original order
+      for every stage of the solution, obtaining a solution of the original
+      problem.
+    </p>
+    <h4>Layout of the table</h4>
+    <p>
+      The coloumns correspond to the above three starting configurations.
+      <br />Rows correspond to final configurations (there are 60 of these).
+      <br />The minimum number of moves to get from the starting configuration
+      to the final configuration is shown. <br />A configuration that can
+      possibly occur just before the final move, when using a minimal length
+      solution, is also shown. This allows working backwards to find a full
+      minimal length solution (although doing so may be a little bit tedious).
+    </p>
+    <h3>The results table</h3>
+    <table>
+      <tr style="font-size: medium">
+        <td colspan="3">Starting configuration<br />{{ equal.options.0 }}</td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td colspan="3">Starting configuration<br />{{ equal.options.1 }}</td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td colspan="3">Starting configuration<br />{{ equal.options.2 }}</td>
+      </tr>
+      <tr style="font-size: medium">
+        <td>Final<br />configuration</td>
+        <td>#<br />moves</td>
+        <td>Configuration<br />before<br />last move</td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td>Final<br />configuration</td>
+        <td>#<br />moves</td>
+        <td>Configuration<br />before<br />last move</td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td>Final<br />configuration</td>
+        <td>#<br />moves</td>
+        <td>Configuration<br />before<br />last move</td>
+      </tr>
+      {% for row in equal.table %}
+      <tr>
+        {% for col in row %} {% if loop.index0 in [3, 6] %}
+        <td style="background-color: #dce6e1"></td>
+        {% endif %}
+        <td>{{ col }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+    <h2>The case of rods of decreasing size</h2>
+    <h3>Starting configurations</h3>
+    <p>
+      In this case we lose the symmetry between the rods, so we have more
+      starting configurations. These are:
+    </p>
+    <div class="flex-row">
+      {{ decreasing.options.0 }} {{ decreasing.options.1 }} {{
+      decreasing.options.2 }} {{ decreasing.options.3 }} {{ decreasing.options.4
+      }} {{ decreasing.options.5 }}
+    </div>
+    <h3>Table design</h3>
+    <p>
+      The table will be much the same as before, but will now have two parts,
+      the first with the first three starting configurations, the second with
+      the second three starting configurations. <br />Each has 36 rows for 36
+      possible final configurations.
+    </p>
+    <h3>Table part 1</h3>
+    <table>
+      <tr style="font-size: medium">
+        <td colspan="3">
+          Starting configuration<br />{{ decreasing.options.0 }}
+        </td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td colspan="3">
+          Starting configuration<br />{{ decreasing.options.1 }}
+        </td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td colspan="3">
+          Starting configuration<br />{{ decreasing.options.2 }}
+        </td>
+      </tr>
+      <tr style="font-size: medium">
+        <td>Final<br />configuration</td>
+        <td>#<br />moves</td>
+        <td>Configuration<br />before<br />last move</td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td>Final<br />configuration</td>
+        <td>#<br />moves</td>
+        <td>Configuration<br />before<br />last move</td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td>Final<br />configuration</td>
+        <td>#<br />moves</td>
+        <td>Configuration<br />before<br />last move</td>
+      </tr>
+      {% for row in decreasing.table %}
+      <tr>
+        {% for col in row[:9] %} {% if loop.index0 in [3, 6] %}
+        <td style="background-color: #dce6e1"></td>
+        {% endif %}
+        <td>{{ col }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+    <h3>Table part 2</h3>
+    <table>
+      <tr style="font-size: medium">
+        <td colspan="3">
+          Starting configuration<br />{{ decreasing.options.3 }}
+        </td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td colspan="3">
+          Starting configuration<br />{{ decreasing.options.4 }}
+        </td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td colspan="3">
+          Starting configuration<br />{{ decreasing.options.5 }}
+        </td>
+      </tr>
+      <tr style="font-size: medium">
+        <td>Final<br />configuration</td>
+        <td>#<br />moves</td>
+        <td>Configuration<br />before<br />last move</td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td>Final<br />configuration</td>
+        <td>#<br />moves</td>
+        <td>Configuration<br />before<br />last move</td>
+        <td style="width: 3%; background-color: #dce6e1"></td>
+        <td>Final<br />configuration</td>
+        <td>#<br />moves</td>
+        <td>Configuration<br />before<br />last move</td>
+      </tr>
+      {% for row in decreasing.table %}
+      <tr>
+        {% for col in row[9:] %} {% if loop.index0 in [3, 6] %}
+        <td style="background-color: #dce6e1"></td>
+        {% endif %}
+        <td>{{ col }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
