@@ -6,6 +6,7 @@ svg {
   max-width: 95dvw;
 }
 .container {
+  user-select: none;
   display: flex;
   flex-direction: row;
   justify-content: center;
