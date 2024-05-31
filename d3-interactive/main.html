@@ -67,13 +67,17 @@
       else if (cx < 63 + 1 / 3) return 2;
       else return 3;
     }
+
     const diff = { x: undefined, y: undefined };
     let startCol;
+    let currentElement;
+
     function startDragging(event, d) {
-      const cx = Number(d3.select(this).attr("cx"));
+      currentElement = d3.select(this);
+      const cx = Number(currentElement.attr("cx"));
       startCol = getCol(cx);
       diff.x = cx - event.x;
-      diff.y = Number(d3.select(this).attr("cy")) - event.y;
+      diff.y = Number(currentElement.attr("cy")) - event.y;
     }
 
     function dragging(event) {
@@ -83,17 +87,13 @@
     }
 
     function endDragging(event) {
-      const cx = Number(d3.select(this).attr("cx"));
-      const endCol = getCol(cx);
-      reorder(startCol - 1, endCol - 1);
-      render();
-    }
-
-    function reorder(start, end) {
+      const cx = Number(currentElement.attr("cx"));
+      const end = getCol(cx) - 1;
       if (matrix[end].length < 3 - end) {
-        const num = matrix[start].pop();
+        const num = matrix[startCol - 1].pop();
         matrix[end].push(num);
       }
+      render();
     }
 
     function render() {
@@ -113,6 +113,7 @@
         .attr("stroke-width", "2")
         .classed("last-child", (d, j) => j === d[2])
         .on(".drag", null);
+
       d3.selectAll(".last-child").call(
         d3
           .drag()
