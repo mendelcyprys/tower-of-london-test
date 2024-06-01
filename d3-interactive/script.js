@@ -1,11 +1,14 @@
 const colours = ["#EF3636", "#30C953", "#2C7FB7"];
 
-let matrix = [[1, 2], [3], []];
+let matrix = [[1, 2, 3], [], []];
+
+let moves = 0;
+const movesTextElement = d3.select("#moves");
 
 function getCol(cx) {
-  if (cx < 36 + 2 / 3) return 1;
-  else if (cx < 63 + 1 / 3) return 2;
-  else return 3;
+  if (cx < 36 + 2 / 3) return 0;
+  else if (cx < 63 + 1 / 3) return 1;
+  else return 2;
 }
 
 const diff = { x: undefined, y: undefined };
@@ -28,10 +31,12 @@ function dragging(event) {
 
 function endDragging(event) {
   const cx = Number(this.getAttribute("cx"));
-  const end = getCol(cx) - 1;
-  if (matrix[end].length < 3 - end) {
-    const num = matrix[startCol - 1].pop();
+  const end = getCol(cx);
+  if (matrix[end].length < 3 - end && startCol !== end) {
+    const num = matrix[startCol].pop();
     matrix[end].push(num);
+    moves++;
+    movesTextElement.text(`moves: ${moves}`);
   }
   render();
 }
