@@ -2,12 +2,13 @@ body {
   margin: 0px;
 }
 svg {
-  max-height: 95dvh;
   max-width: 95dvw;
+  border-style: solid;
 }
 .container {
   user-select: none;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  max-height: 80dvh;
 }
