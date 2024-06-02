@@ -1,6 +1,33 @@
 const colours = ["#EF3636", "#30C953", "#2C7FB7"];
 
-let matrix = [[1, 2, 3], [], []];
+const taskData = [
+  {
+    matrix: [[1, 2, 3], [], []],
+    target: [[], [1, 2], [3]],
+    targetSVG: "",
+  },
+  {
+    matrix: [[1, 2], [], [3]],
+    target: [[2], [1], [3]],
+    targetSVG: "",
+  },
+  {
+    matrix: [[1, 2, 3], [], []],
+    target: [[], [1, 2], [3]],
+    targetSVG: "",
+  },
+  {
+    matrix: [[1, 2, 3], [], []],
+    target: [[], [1, 2], [3]],
+    targetSVG: "",
+  },
+  {
+    matrix: [[1, 2, 3], [], []],
+    target: [[], [1, 2], [3]],
+    targetSVG: "",
+  },
+]
+let matrix;
 
 let moves = 0;
 const movesTextElement = d3.select("#moves");
@@ -68,4 +95,20 @@ function render() {
   );
 }
 
-render();
+const menuButtons = d3.selectAll(".menu button");
+
+function buttonClick(event, d) {
+  menuButtons.classed("selected", false);
+  event.target.classList.add("selected");
+  currentTask = taskData[d];
+  // deep copy the starting position
+  matrix = JSON.parse(JSON.stringify(currentTask.matrix));
+  // reset the number of moves
+  moves = 0;
+  movesTextElement.text(`moves: ${moves}`);
+  render();
+}
+
+menuButtons
+  .data([0, 1, 2, 3, 4])
+  .on("click", buttonClick);
