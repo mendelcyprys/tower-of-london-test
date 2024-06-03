@@ -2,35 +2,39 @@ const colours = ["#EF3636", "#30C953", "#2C7FB7"];
 
 const taskData = [
   {
+    matrix: [[1], [2], [3]],
+    target: [[3, 1], [], [2]],
+    targetSVG: "",
+  },
+  {
     matrix: [[1, 2, 3], [], []],
-    target: [[], [1, 2], [3]],
+    target: [[2, 1], [3], []],
     targetSVG: "",
   },
   {
     matrix: [[1, 2], [], [3]],
-    target: [[2], [1], [3]],
+    target: [[3], [1], [2]],
     targetSVG: "",
   },
   {
-    matrix: [[1, 2, 3], [], []],
+    matrix: [[1, 2], [3], []],
     target: [[], [1, 2], [3]],
     targetSVG: "",
   },
   {
-    matrix: [[1, 2, 3], [], []],
-    target: [[], [1, 2], [3]],
-    targetSVG: "",
-  },
-  {
-    matrix: [[1, 2, 3], [], []],
-    target: [[], [1, 2], [3]],
+    matrix: [[3], [1, 2], []],
+    target: [[1, 2], [3], []],
     targetSVG: "",
   },
 ]
 let matrix;
+let target;
+let startTime;
 
 let moves = 0;
 const movesTextElement = d3.select("#moves");
+const successTextElement = d3.select("#success-message");
+const timeTextElement = d3.select("#time-message");
 
 function getCol(cx) {
   if (cx < 36 + 2 / 3) return 0;
@@ -64,8 +68,19 @@ function endDragging(event) {
     matrix[end].push(num);
     moves++;
     movesTextElement.text(`moves: ${moves}`);
+    render();
+    // check if target state has been reached
+    if (JSON.stringify(matrix) === target) {
+      const totalTime = Date.now() - startTime;
+      successTextElement.attr("visibility", "visible");
+      d3.selectAll("circle").on(".drag", null);
+      timeString = (totalTime / 1000).toFixed(2);
+      timeTextElement.text(`time: ${timeString}s`)
+                     .attr("visibility", "visible");
+    }
+  } else {
+    render();
   }
-  render();
 }
 
 function render() {
@@ -103,10 +118,14 @@ function buttonClick(event, d) {
   currentTask = taskData[d];
   // deep copy the starting position
   matrix = JSON.parse(JSON.stringify(currentTask.matrix));
+  target = JSON.stringify(currentTask.target);
   // reset the number of moves
   moves = 0;
   movesTextElement.text(`moves: ${moves}`);
+  successTextElement.attr("visibility", "hidden");
+  timeTextElement.attr("visibility", "hidden");
   render();
+  startTime = Date.now();
 }
 
 menuButtons

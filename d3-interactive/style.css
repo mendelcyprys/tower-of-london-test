@@ -39,9 +39,15 @@ body {
   justify-content: center;
   max-height: 80dvh;
 }
-.moves {
+.svg-text {
   font-size: 0.75em;
   opacity: 0.8;
   fill: #ca6c2d;
   font-family: monospace;
+}
+.success {
+  fill: #6cca2d;
+}
+.time {
+  font-size: 0.5em;
 }
