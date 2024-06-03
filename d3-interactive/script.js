@@ -35,6 +35,7 @@ let moves = 0;
 const movesTextElement = d3.select("#moves");
 const successTextElement = d3.select("#success-message");
 const timeTextElement = d3.select("#time-message");
+const targetSVGElement = d3.select("#target-svg");
 
 function getCol(cx) {
   if (cx < 36 + 2 / 3) return 0;
@@ -72,6 +73,7 @@ function endDragging(event) {
     // check if target state has been reached
     if (JSON.stringify(matrix) === target) {
       const totalTime = Date.now() - startTime;
+      targetSVGElement.attr("visibility", "hidden");
       successTextElement.attr("visibility", "visible");
       d3.selectAll("circle").on(".drag", null);
       timeString = (totalTime / 1000).toFixed(2);
@@ -84,8 +86,8 @@ function endDragging(event) {
 }
 
 function render() {
-  d3.select("svg")
-    .selectAll("g")
+  d3.select("#main-svg")
+    .selectAll("#main-svg > g")
     .data(matrix)
     .join("g")
     .selectAll("circle")
@@ -124,6 +126,24 @@ function buttonClick(event, d) {
   movesTextElement.text(`moves: ${moves}`);
   successTextElement.attr("visibility", "hidden");
   timeTextElement.attr("visibility", "hidden");
+
+  // render target svg
+  targetSVGElement
+    .attr("visibility", "visible")
+    .selectAll("g")
+    .data(currentTask.target)
+    .join("g")
+    .selectAll("circle")
+    .data((d, i) => d.map((x) => [x, i, d.length - 1]))
+    .join("circle")
+    .attr("cy", (_, j) => 80 - j * 20)
+    .attr("cx", (d) => 23 + 1 / 3 + d[1] * (26 + 2 / 3))
+    .attr("fill", (d) => colours[d[0] - 1])
+    .attr("r", "9")
+    .attr("stroke", "black")
+    .attr("stroke-opacity", "0.7")
+    .attr("stroke-width", "2");
+
   render();
   startTime = Date.now();
 }

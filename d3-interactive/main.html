@@ -13,6 +13,7 @@
   </div>
   <div class="container">
     <svg
+      id="main-svg"
       version="1.1"
       viewBox="0 0 100 100"
       xmlns="http://www.w3.org/2000/svg"
@@ -20,9 +21,49 @@
       xmlns:xlink="http://www.w3.org/1999/xlink"
     >
       <image href="background.svg" x="0" y="0" height="100%" width="100%" />
+      <svg
+        id="target-svg"
+        x="70"
+        y="0"
+        height="30%"
+        width="30%"
+        version="1.1"
+        viewBox="0 0 100 100"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:ev="http://www.w3.org/2001/xml-events"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        visibility="hidden"
+        opacity="0.8"
+      >
+        <image
+          id="target"
+          href="background.svg"
+          x="0"
+          y="0"
+          height="100%"
+          width="100%"
+        />
+        <text class="svg-text target" x="35" y="25">target:</text>
+      </svg>
       <text id="moves" class="svg-text" x="10" y="10">moves: 0</text>
-      <text id="success-message" class="svg-text success" x="35" y="20" visibility="hidden">success!</text>
-      <text id="time-message" class="svg-text time" x="35" y="30" visibility="hidden">time: 0000.00s</text>
+      <text
+        id="success-message"
+        class="svg-text success"
+        x="35"
+        y="20"
+        visibility="hidden"
+      >
+        success!
+      </text>
+      <text
+        id="time-message"
+        class="svg-text time"
+        x="35"
+        y="30"
+        visibility="hidden"
+      >
+        time: 0000.00s
+      </text>
     </svg>
   </div>
   <script src="d3.v7.min.js"></script>
