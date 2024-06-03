@@ -4,47 +4,42 @@ const taskData = [
   {
     matrix: [[1], [2], [3]],
     target: [[3, 1], [], [2]],
-    targetSVG: "",
   },
   {
     matrix: [[1, 2, 3], [], []],
     target: [[2, 1], [3], []],
-    targetSVG: "",
   },
   {
     matrix: [[1, 2], [], [3]],
     target: [[3], [1], [2]],
-    targetSVG: "",
   },
   {
     matrix: [[1, 2], [3], []],
     target: [[], [1, 2], [3]],
-    targetSVG: "",
   },
   {
     matrix: [[3], [1, 2], []],
     target: [[1, 2], [3], []],
-    targetSVG: "",
   },
 ]
+
 let matrix;
 let target;
 let startTime;
-
 let moves = 0;
+const diff = { x: undefined, y: undefined };
+let startCol;
 const movesTextElement = d3.select("#moves");
 const successTextElement = d3.select("#success-message");
 const timeTextElement = d3.select("#time-message");
 const targetSVGElement = d3.select("#target-svg");
+const menuButtons = d3.selectAll(".menu button");
 
 function getCol(cx) {
   if (cx < 36 + 2 / 3) return 0;
   else if (cx < 63 + 1 / 3) return 1;
   else return 2;
 }
-
-const diff = { x: undefined, y: undefined };
-let startCol;
 
 function startDragging(event) {
   // bring to front (with svg need to reappend)
@@ -61,7 +56,7 @@ function dragging(event) {
   this.setAttribute("cy", event.y + diff.y);
 }
 
-function endDragging(event) {
+function endDragging() {
   const cx = Number(this.getAttribute("cx"));
   const end = getCol(cx);
   if (matrix[end].length < 3 - end && startCol !== end) {
@@ -76,9 +71,9 @@ function endDragging(event) {
       targetSVGElement.attr("visibility", "hidden");
       successTextElement.attr("visibility", "visible");
       d3.selectAll("circle").on(".drag", null);
-      timeString = (totalTime / 1000).toFixed(2);
-      timeTextElement.text(`time: ${timeString}s`)
-                     .attr("visibility", "visible");
+      timeTextElement
+        .text(`time: ${(totalTime / 1000).toFixed(2)}s`)
+        .attr("visibility", "visible");
     }
   } else {
     render();
@@ -87,7 +82,7 @@ function endDragging(event) {
 
 function render() {
   d3.select("#main-svg")
-    .selectAll("#main-svg > g")
+    .selectAll("#main-svg > g") // somehow works
     .data(matrix)
     .join("g")
     .selectAll("circle")
@@ -103,16 +98,14 @@ function render() {
     .classed("last-child", (d, j) => j === d[2])
     .on(".drag", null);
 
+  // reattach drag behaviour, only to the top circles 
   d3.selectAll(".last-child").call(
-    d3
-      .drag()
+    d3.drag()
       .on("start", startDragging)
       .on("drag", dragging)
       .on("end", endDragging)
   );
 }
-
-const menuButtons = d3.selectAll(".menu button");
 
 function buttonClick(event, d) {
   menuButtons.classed("selected", false);
